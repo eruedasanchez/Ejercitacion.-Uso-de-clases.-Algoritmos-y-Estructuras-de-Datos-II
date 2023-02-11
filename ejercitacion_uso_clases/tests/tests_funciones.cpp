@@ -54,13 +54,36 @@ void test_ej3(bool (*me)(vector<int>, vector<int>)) {
   EXPECT_TRUE(!(*me)(vector<int>{3, 3, 2, 1}, vector<int>{1, 3}));
 }
 
-TEST(Ej, 01) { test_ej1(quitar_repetidos); }
+TEST(Ej, 01) {
+    EXPECT_EQ(quitar_repetidos(vector<int>()), vector<int>());
+    EXPECT_EQ(quitar_repetidos(vector<int>({1, 2, 3, 3})), vector<int>({1, 2,3}));
+    EXPECT_EQ(quitar_repetidos(vector<int>({})), vector<int>({}));
+    EXPECT_EQ(quitar_repetidos(vector<int>({1, 2, 3, 3, 5, 2})), vector<int>({1, 2, 3, 5}));
+}
 
-TEST(Ej, 02) { test_ej1(quitar_repetidos_v2); }
+TEST(Ej, 02) {
+    EXPECT_EQ(quitar_repetidos_v2(vector<int>()), vector<int>());
+    EXPECT_EQ(quitar_repetidos_v2(vector<int>({1, 2, 3, 3})), vector<int>({1, 2, 3}));
+    EXPECT_EQ(quitar_repetidos_v2(vector<int>({})), vector<int>({}));
+    EXPECT_EQ(quitar_repetidos_v2(vector<int>({1, 2, 3, 3, 5, 2})), vector<int>({1, 2, 3, 5}));
+}
 
-TEST(Ej, 03) { test_ej3(mismos_elementos); }
+TEST(Ej, 03) {
+    // EXPECT_EQ(mismos_elementos(vector<int>(), vector<int>()), bool);
+    EXPECT_EQ(mismos_elementos(vector<int>(), vector<int>()), true);
+    EXPECT_EQ(mismos_elementos(vector<int>({1, 2, 3}), vector<int>()), false);
+    EXPECT_EQ(mismos_elementos(vector<int>({4, 4, 4}), vector<int>({4})), true);
+    EXPECT_EQ(mismos_elementos(vector<int>({1, 2, 3}), vector<int>({2, 4})), false);
+    EXPECT_EQ(mismos_elementos(vector<int>({1, 2, 2}), vector<int>({2, 1, 4})), false);
+}
 
-TEST(Ej, 04) { test_ej3(mismos_elementos_v2); }
+TEST(Ej, 04) {
+    EXPECT_EQ(mismos_elementos_v2(vector<int>(), vector<int>()), true);
+    EXPECT_EQ(mismos_elementos_v2(vector<int>({1, 2, 3}), vector<int>()), false);
+    EXPECT_EQ(mismos_elementos_v2(vector<int>({4, 4, 4}), vector<int>({4})), true);
+    EXPECT_EQ(mismos_elementos_v2(vector<int>({1, 2, 3}), vector<int>({2, 4})), false);
+    EXPECT_EQ(mismos_elementos_v2(vector<int>({1, 2, 2}), vector<int>({2, 1, 4})), false);
+}
 
 TEST(Ej, 05) {
   EXPECT_TRUE((contar_apariciones(vector<int>()) == map<int, int>()));
