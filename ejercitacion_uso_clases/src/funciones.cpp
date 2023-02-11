@@ -130,6 +130,8 @@ bool mismos_elementos_v2(vector<int> a, vector<int> b) {
     int j = 0;
     set<int> conjuntoA;
     set<int> conjuntoB;
+    bool mismosElementosDeBenA = true;
+    bool mismosElementosDeAenB = true;
 
     if(a.size() == 0 && b.size() == 0){
         /* Caso particular donde ambos vectores son vacios */
@@ -145,35 +147,31 @@ bool mismos_elementos_v2(vector<int> a, vector<int> b) {
         }
 
         /* Se coloca en un conjunto a los elementos de b sin repetidos */
-        for(int indexB = 0; indexB < a.size(); indexB++){
-            if(conjuntoB.count(a[indexB]) == 0){
-                conjuntoB.insert(a[indexB]);
+        for(int indexB = 0; indexB < b.size(); indexB++){
+            if(conjuntoB.count(b[indexB]) == 0){
+                conjuntoB.insert(b[indexB]);
             }
         }
 
         /* Por ultimo, se fija si ambos conjuntos tienen los mismos elementos */
         for(int n: conjuntoA){
-            if(conjuntoB.count(n) == 0){
-                mismosElementos = false;
-                break;
+            if(conjuntoB.count(n) == 1){
+                mismosElementosDeBenA = mismosElementosDeBenA && true;
             } else {
-                i++;
+                mismosElementosDeBenA = mismosElementosDeBenA && false;
             }
         }
 
         for(int m: conjuntoB){
-            if(conjuntoA.count(m) == 0){
-                mismosElementos = false;
-                break;
+            if(conjuntoA.count(m) == 1){
+                mismosElementosDeAenB = mismosElementosDeAenB && true;
             } else {
-                j++;
+                mismosElementosDeAenB = mismosElementosDeAenB && false;
             }
         }
     }
 
-    if((i == conjuntoA.size()) && (j == conjuntoB.size())){
-        mismosElementos = true;
-    }
+    mismosElementos = mismosElementosDeAenB && mismosElementosDeBenA;
     return mismosElementos;
 }
 
@@ -229,20 +227,113 @@ set<int> interseccion(set<int> a, set<int> b) {
     return inter;
 }
 
-// Ejercicio 8
-map<int, set<int>> agrupar_por_unidades(vector<int> s) {
-    return map<int, set<int>>();
+/* Ejercicio 8 */
+map<int, set<int>> agrupar_por_unidades(vector<int> s){
+    map<int, set<int>> diccPorUnidades;
+    set<int> ultimoDigitoCero;
+    set<int> ultimoDigitoUno;
+    set<int> ultimoDigitoDos;
+    set<int> ultimoDigitoTres;
+    set<int> ultimoDigitoCuatro;
+    set<int> ultimoDigitoCinco;
+    set<int> ultimoDigitoSeis;
+    set<int> ultimoDigitoSiete;
+    set<int> ultimoDigitoOcho;
+    set<int> ultimoDigitoNueve;
+
+    /* Se coloca cada elemento en el conjunto donde la posicion i coincide con el ultimo digito del elemento */
+    for(int i: s){
+        int digitoMenosSignificativo = i % 10;
+
+        if(digitoMenosSignificativo == 0){
+            ultimoDigitoCero.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoCero;
+
+        } else if(digitoMenosSignificativo == 1){
+            ultimoDigitoUno.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoUno;
+
+        } else if(digitoMenosSignificativo == 2){
+            ultimoDigitoDos.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoDos;
+
+        } else if(digitoMenosSignificativo == 3){
+            ultimoDigitoTres.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoTres;
+
+        } else if(digitoMenosSignificativo == 4){
+            ultimoDigitoCuatro.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoCuatro;
+
+        } else if(digitoMenosSignificativo == 5){
+            ultimoDigitoCinco.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoCinco;
+
+        } else if(digitoMenosSignificativo == 6){
+            ultimoDigitoSeis.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoSeis;
+
+        } else if(digitoMenosSignificativo == 7){
+            ultimoDigitoSiete.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoSiete;
+
+        } else if(digitoMenosSignificativo == 8){
+            ultimoDigitoOcho.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoOcho;
+
+        } else {
+            ultimoDigitoNueve.insert(i);
+            diccPorUnidades[digitoMenosSignificativo] = ultimoDigitoNueve;
+        }
+    }
+    return diccPorUnidades;
 }
 
-// Ejercicio 9
-vector<char> traducir(vector<pair<char, char>> tr, vector<char> str) {
-    return vector<char>();
+/* Ejercicio 9 */
+vector<char> traducir(vector<pair<char, char>> tr, vector<char> str){
+    vector<char> traduccion;
+
+    int i = 0;
+    while(i < str.size()){
+        int j = 0;
+        while (j < tr.size()){
+            if (int(str[i]) == int(tr[j].first)){
+                traduccion.push_back(tr[j].second);
+                j = tr.size() + 1;
+            } else {
+                j++;
+            }
+        }
+        if(j == tr.size()){
+            traduccion.push_back(str[i]);
+        }
+        i++;
+    }
+    return traduccion;
 }
 
-// Ejercicio 10
+/* Ejercicio 10 */
+
+
 bool integrantes_repetidos(vector<Mail> s) {
-    return true;
+    bool hayIntegrantesRepetidos = false;
+    for(Mail m: s){
+        set<LU> conjLibretas = m.libretas();
+        for(LU l: conjLibretas){
+            // int numeroLuActual = l.numero();
+            // int anioLuActual = l.anio();
+            for(Mail mindex :s){
+                set<LU> libretasIndexActual = mindex.libretas();
+                if((libretasIndexActual.count(l) == 1) && !(conjLibretas == libretasIndexActual)){
+                    hayIntegrantesRepetidos = true;
+                    break;
+                }
+            }
+        }
+    }
+    return hayIntegrantesRepetidos;
 }
+
 
 // Ejercicio 11
 map<set<LU>, Mail> entregas_finales(vector<Mail> s) {
