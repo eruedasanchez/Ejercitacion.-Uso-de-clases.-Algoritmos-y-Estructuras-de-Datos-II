@@ -44,40 +44,189 @@ vector<int> interseccion(vector<int> a, vector<int> b){
     return inter;
 }
 
+/* Ejercitacion a resolver */
 
-// Ejercicio 1
-vector<int> quitar_repetidos(vector<int> s) {
-    return vector<int>();
+/* Ejercicio 1 */
+
+int cantApariciones(vector<int> vec, int elem, int desde, int hasta){
+    int apariciones = 0;
+    for(int i = desde; i < hasta; i++){
+        if(vec[i] == elem){
+            apariciones++;
+        }
+    }
+    return apariciones;
 }
 
-// Ejercicio 2
-vector<int> quitar_repetidos_v2(vector<int> s) {
-    return vector<int>();
+vector<int> quitar_repetidos(vector<int> s){
+    vector<int> sinRepetidos;
+
+    for(int i = 0; i < s.size(); i++){
+        if(cantApariciones(s,s[i],0,i) == 0){
+            sinRepetidos.push_back(s[i]);
+        }
+    }
+    return sinRepetidos;
 }
 
-// Ejercicio 3
+/* Ejercicio 2 */
+vector<int> quitar_repetidos_v2(vector<int> s){
+    vector<int> sinRepe;
+    set<int> setSinRepetidos;
+    for(int i = 0; i < s.size(); i++){
+        if(setSinRepetidos.count(s[i]) == 0){
+            setSinRepetidos.insert(s[i]);
+        }
+    }
+
+    /* Por ultimo, se pasan los elementos del conjunto al vector */
+    for(int n: setSinRepetidos){
+        sinRepe.push_back(n);
+    }
+    return sinRepe;
+}
+
+/* Ejercicio 3 */
+bool estaEn(vector<int> vec, int elemento){
+    bool seEncuentra = false;
+    for(int i = 0; i < vec.size(); i++){
+        if(vec[i] == elemento){
+            seEncuentra = true;
+            break;
+        }
+    }
+    return seEncuentra;
+}
 bool mismos_elementos(vector<int> a, vector<int> b) {
-    return true;
+    int indexA = 0;
+    int indexB = 0;
+    bool mismos = false;
+
+    if(a.size() == 0 && b.size() == 0){
+        /* Caso particular donde ambos vectores son vacios */
+        mismos = true;
+    } else {
+        /* Casos restantes */
+        while((indexA < a.size()) && (estaEn(b,a[indexA]))){
+            /* No hago nada. Aumento i */
+            indexA++;
+        }
+        while((indexB < b.size()) && (estaEn(a,b[indexB]))){
+            /* No hago nada. Aumento i */
+            indexB++;
+        }
+    }
+
+    if(indexA == a.size() && indexB == b.size()){
+        mismos = true;
+    }
+    return mismos;
 }
 
-// Ejercicio 4
+/* Ejercicio 4 */
 bool mismos_elementos_v2(vector<int> a, vector<int> b) {
-    return true;
+    bool mismosElementos = false;
+    int i = 0;
+    int j = 0;
+    set<int> conjuntoA;
+    set<int> conjuntoB;
+
+    if(a.size() == 0 && b.size() == 0){
+        /* Caso particular donde ambos vectores son vacios */
+        mismosElementos = true;
+    } else {
+        /* Casos restantes */
+
+        /* Se coloca en un conjunto a los elementos de a sin repetidos */
+        for(int indexA = 0; indexA < a.size(); indexA++){
+            if(conjuntoA.count(a[indexA]) == 0){
+                conjuntoA.insert(a[indexA]);
+            }
+        }
+
+        /* Se coloca en un conjunto a los elementos de b sin repetidos */
+        for(int indexB = 0; indexB < a.size(); indexB++){
+            if(conjuntoB.count(a[indexB]) == 0){
+                conjuntoB.insert(a[indexB]);
+            }
+        }
+
+        /* Por ultimo, se fija si ambos conjuntos tienen los mismos elementos */
+        for(int n: conjuntoA){
+            if(conjuntoB.count(n) == 0){
+                mismosElementos = false;
+                break;
+            } else {
+                i++;
+            }
+        }
+
+        for(int m: conjuntoB){
+            if(conjuntoA.count(m) == 0){
+                mismosElementos = false;
+                break;
+            } else {
+                j++;
+            }
+        }
+    }
+
+    if((i == conjuntoA.size()) && (j == conjuntoB.size())){
+        mismosElementos = true;
+    }
+    return mismosElementos;
 }
 
-// Ejercicio 5
+/* Ejercicio 5 */
 map<int, int> contar_apariciones(vector<int> s) {
-    return map<int, int>();
+    map<int, int> elementosyApariciones;
+
+    for(int n: s){
+        if(elementosyApariciones.count(n) == 0){
+            /* La  clave no esta definida */
+            elementosyApariciones[n] = 1;
+        } else {
+            /* La clave esta definida */
+            elementosyApariciones[n] = elementosyApariciones[n] + 1;
+        }
+    }
+    return elementosyApariciones;
 }
 
-// Ejercicio 6
+/* Ejercicio 6 */
+int apariciones(vector<int> vec, int elem){
+    int ap = 0;
+    for(int i = 0; i < vec.size(); i++){
+        if(vec[i] == elem){
+            ap++;
+        }
+    }
+    return ap;
+}
+
+
 vector<int> filtrar_repetidos(vector<int> s) {
-    return vector<int>();
+    vector<int> sinRepetidos;
+
+    for(int i = 0; i < s.size(); i++){
+        if(apariciones(s,s[i]) < 2){
+            sinRepetidos.push_back(s[i]);
+        }
+    }
+    return sinRepetidos;
 }
 
-// Ejercicio 7
+/* Ejercicio 7 */
 set<int> interseccion(set<int> a, set<int> b) {
-    return set<int>();
+    set<int> inter;
+
+    /* Vemos que elementos del conjunto "b" se encuentran en el conjunto "a" */
+    for(int n: b){
+        if(a.count(n) == 1){
+            inter.insert(n);
+        }
+    }
+    return inter;
 }
 
 // Ejercicio 8
