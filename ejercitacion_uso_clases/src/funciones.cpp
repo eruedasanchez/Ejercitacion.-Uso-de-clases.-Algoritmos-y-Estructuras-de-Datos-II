@@ -314,17 +314,63 @@ vector<char> traducir(vector<pair<char, char>> tr, vector<char> str){
 
 /* Ejercicio 10 */
 
+bool sonIguales(set<LU> conj1, set<LU> conj2){
+    bool iguales = false;
+    int libretasEnInterseccion = 0;
+
+    if(conj1.size() == conj2.size()){
+        /* Si ambos conjuntos tienen la misma longitud, puede haber mismos integrantes */
+        for(LU l1: conj1){
+            int numeroLuUnoActual = l1.numero();
+            int anioLuUnoActual = l1.anio();
+            for(LU l2: conj2){
+                int numeroLuDosActual = l2.numero();
+                int anioLuDosActual = l2.anio();
+                if(numeroLuUnoActual == numeroLuDosActual && anioLuUnoActual == anioLuDosActual){
+                    libretasEnInterseccion++;
+                }
+            }
+        }
+    }
+    if(libretasEnInterseccion == conj1.size()){
+        iguales = true;
+    }
+    /* Caso contrario, los integrantes son distintos porque en un conjunto, cada uno de ellos aparece una unica vez */
+    return iguales;
+}
+
+bool hayIntegrantesEnComun(set<LU> conj1, set<LU> conj2){
+    bool enComun = false;
+    int libretasEnComun = 0;
+
+    for(LU l1: conj1){
+            int numeroLuUnoActual = l1.numero();
+            int anioLuUnoActual = l1.anio();
+            for(LU l2: conj2){
+                int numeroLuDosActual = l2.numero();
+                int anioLuDosActual = l2.anio();
+                if(numeroLuUnoActual == numeroLuDosActual && anioLuUnoActual == anioLuDosActual){
+                    libretasEnComun++;
+                }
+            }
+    }
+
+    if(libretasEnComun > 0){
+        enComun = true;
+    }
+    return enComun;
+}
+
 
 bool integrantes_repetidos(vector<Mail> s) {
     bool hayIntegrantesRepetidos = false;
     for(Mail m: s){
-        set<LU> conjLibretas = m.libretas();
-        for(LU l: conjLibretas){
-            // int numeroLuActual = l.numero();
-            // int anioLuActual = l.anio();
-            for(Mail mindex :s){
-                set<LU> libretasIndexActual = mindex.libretas();
-                if((libretasIndexActual.count(l) == 1) && !(conjLibretas == libretasIndexActual)){
+        set<LU> conjLUActual = m.libretas();
+        for(Mail mindex: s){
+            set<LU> conjLUIndexActual = mindex.libretas();
+            if(!(sonIguales(conjLUActual, conjLUIndexActual))){
+                /* Los integrantes del grupo son distintos. Resta ver si hay algun integrante en comun */
+                if(hayIntegrantesEnComun(conjLUActual, conjLUIndexActual)){
                     hayIntegrantesRepetidos = true;
                     break;
                 }
@@ -335,7 +381,24 @@ bool integrantes_repetidos(vector<Mail> s) {
 }
 
 
-// Ejercicio 11
-map<set<LU>, Mail> entregas_finales(vector<Mail> s) {
-  return map<set<LU>, Mail>();
+/* Ejercicio 11 */
+map<set<LU>, Mail> entregas_finales(vector<Mail> s){
+    map<set<LU>, Mail> entregasFinales;
+    for(Mail mailEnviado: s){
+        bool tieneArchivosAdjuntos = mailEnviado.adjunto();
+        set<LU> integrantesGrupoActual = mailEnviado.libretas();
+        if((entregasFinales.count(integrantesGrupoActual) == 0) && tieneArchivosAdjuntos){
+            /* Primera entrega del grupo con archivos adjuntos */
+            entregasFinales[integrantesGrupoActual] = mailEnviado;
+        } else if(tieneArchivosAdjuntos){
+            /* El grupo ya realizo su primer entrega */
+            Fecha ultimaEntregaRealizada = entregasFinales[integrantesGrupoActual].fecha();
+            Fecha entregaActual = mailEnviado.fecha();
+            if(entregaActual > ultimaEntregaRealizada){
+                /* Se actualiza el mail con la nueva entrega */
+                entregasFinales[integrantesGrupoActual] = mailEnviado;
+            }
+        }
+    }
+    return entregasFinales;
 }
